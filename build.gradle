@@ -1,0 +1,49 @@
+// Plugins add new tasks, domain objects, conventions as well as
+// extending core objects and objects from other plugins.
+plugins {
+    id 'java'        // Compile the application (gradle build)
+    id 'application' // Run the application (gradle run)
+}
+
+// Configure the <application> plugin.
+application {
+    mainClassName = 'org.beurive.Main'
+}
+
+// Define a new project property.
+project.ext.debug = true
+
+// The file "gradle_fs_utils.groovy" contains utility functions.
+// Import the functions and use them
+GroovyShell shell = new GroovyShell()
+def fs_utils = shell.parse(new File("${project.projectDir}/gradle_fs_utils.groovy"))
+def sep = fs_utils.get_classpath_separator()
+if (project.ext.debug) {
+    println("CLASS_PATH separator is \"${sep}\".")
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// Create a task
+task setup {
+    System.out.println("Run the <setup> task")
+}
+
+// Tell Gradle to build a JAR file containing the Main class.
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.beurive.Main'
+    }
+    // Set the base name of the archive.
+    // The name of the archive will be: "application-1.0-SNAPSHOT.jar"
+    archiveBaseName = 'application'
+}
