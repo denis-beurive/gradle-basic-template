@@ -6,3 +6,4 @@ gradle
 *.jar
 *.war
 *.ear
+*.msi
